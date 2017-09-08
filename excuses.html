@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Excuse Roladex</title>
+	<script src="https://unpkg.com/vue"></script>
+	<style>
+		.card {
+			display: none;
+			width: 500px;
+			height: 350px;
+			background-color: #fcf1c9;
+		}
+		.card.active {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	
+	<h1>Excuse Roladex</h1>	
+	<h3>Inspired by Seinfeld</h3>
+	<!-- 
+	TODO:
+	One at a time scrolling
+	Random scrolling
+	Ability to add items
+		can currently add a new item with:
+			nav.excuses.push({ id: 5, text: 'New item', active: false })
+	-->
+	<div id="roladex">
+		<ul>
+			<li class="card" v-for="excuse in excuses" v-bind:class="{ 'active': excuse.active}">
+				<span>{{ excuse.id }}. {{ excuse.text }}</span>
+				<button v-on:click="prevActive(excuse)">Previous</button>
+				<button v-on:click="nextActive(excuse)">Next</button>
+			</li>
+		</ul>
+	</div>
+
+	<script>
+		var nav = new Vue({
+			el: '#roladex',
+			data: {
+				excuses: [
+					{ id: 0, text: "Stepped in dog shit", active: true },
+					{ id: 1, text: "Guy in front of me had excessive Starbucks order", active: false },
+					{ id: 2, text: "Hit by bus", active: false },
+					{ id: 3, text: "Forgot to turn dryer on, pants are wet", active: false },
+				],
+			},
+			methods: {
+				toggleActive: function(s){
+					s.active = !s.active;
+				},
+				nextActive: function(ex){
+					excuseNumber = this.excuses.length;
+					nextId = ex.id + 1;
+					prevId = ex.id - 1;
+
+					console.log(prevId);
+					console.log(nextId);
+
+					// change current excuses active state
+					ex.active = !ex.active;
+
+					if(nextId >= excuseNumber) {
+						// if we run out of excuses, reset the counter
+						nextId = 0;
+					}
+
+					// change next excuses active state
+					this.excuses[nextId].active = !this.excuses[nextId].active;
+				},
+				prevActive: function(ex) {
+					// var excuseNumber = this.excuses.length;
+					// var prevId = ex.id - 1;
+					nextId = ex.id + 1;
+					prevId = ex.id - 1;
+
+					console.log(prevId);
+					console.log(nextId);
+
+					// change current excuses active state
+					ex.active = !ex.active;
+
+					if(prevId < 0) {
+						// if we run out of excuses, reset the counter. bc .length counts value, but the ID's are indexed at 0, when the length is 4, the last id # is only 3.
+						prevId = excuseNumber - 1;
+					}
+
+					// change prev excuses active state
+					this.excuses[prevId].active = !this.excuses[prevId].active;
+				},
+			},
+		});
+	</script>
+</body>
+</html>
